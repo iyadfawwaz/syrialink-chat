@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#066C9D</color>
+    <color name="colorPrimaryDark">#066C9D</color>
+    <color name="colorAccent">#DD453A</color>
+    <color name="smoke">#F8F8FA</color>
+</resources>

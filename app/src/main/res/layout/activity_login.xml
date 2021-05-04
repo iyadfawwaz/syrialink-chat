@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:gravity="top|center_vertical|center_horizontal|center"
+            android:orientation="vertical"
+            android:background="@drawable/image_9"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher"
+                android:adjustViewBounds="true"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:fontFamily="serif-monospace"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ce0707"
+                android:textColorHighlight="#000000"
+                android:id="@+id/loginTextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sy"/>
+            <EditText android:textColor="#000000"
+                android:fontFamily="serif-monospace"
+                android:gravity="center"
+                android:id="@+id/email"
+                android:background="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="@string/em"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                tools:ignore="Autofill" />
+            <EditText android:gravity="center"
+                android:id="@+id/password"
+                android:fontFamily="serif-monospace"
+                android:background="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="@string/pass"
+                android:ems="10"
+                android:inputType="textPassword"
+                tools:ignore="Autofill" />
+
+            <ImageView
+                android:background="#72120c"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@drawable/ic_launcher"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:typeface="monospace"
+                android:textStyle="bold"
+                android:fontFamily="serif-monospace"
+                android:textColor="#f9f2f2"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:id="@+id/login"
+                android:background="#0a77af"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/log"
+                android:shadowDx="1"
+                android:alpha="1"/>
+
+            <Button
+                android:id="@+id/google"
+                style="@android:style/Widget.Button.Inset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/google" />
+
+            <LinearLayout
+                android:gravity="bottom|center_vertical|center_horizontal|center"
+                android:orientation="horizontal"
+                android:paddingTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:fontFamily="serif-monospace"
+                    android:textColor="#efe778"
+                    android:id="@+id/res"
+                    android:paddingRight="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/re"
+                    android:paddingEnd="15dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:fontFamily="serif-monospace"
+                    android:textColor="#d7d921"
+                    android:id="@+id/reg"
+                    android:paddingLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/reg"
+                    android:paddingStart="15dp"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:background="#72120c"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_launcher"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

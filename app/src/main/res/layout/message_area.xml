@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="bottom"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@drawable/border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <endless.syria.sychat.Utils.Models.CircleImageView
+            android:id="@+id/kmessageCircleImageView"
+            android:background="#066c9d"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_btn_speak_now"
+            android:layout_weight="4"/>
+
+        <endless.syria.sychat.Utils.Models.CircleImageView
+            android:id="@+id/messageCircleImageView"
+            android:background="#066c9d"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera"
+            android:layout_weight="4"/>
+
+        <EditText
+            android:textColorHint="#cfd8dc"
+            android:gravity="center"
+            android:id="@+id/messageAra"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxHeight="80dp"
+            android:hint="@string/yourmessa"
+            android:layout_weight="2.5"
+            android:autofillHints=""
+            android:fontFamily="serif-monospace"
+            android:inputType="textAutoComplete" />
+
+        <ImageView
+            android:id="@+id/sendButton"
+            android:background="#066c9d"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send"
+            android:layout_weight="4"
+            android:contentDescription="@string/todo" />
+    </LinearLayout>
+</LinearLayout>

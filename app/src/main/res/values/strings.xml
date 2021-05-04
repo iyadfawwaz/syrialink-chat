@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name" translatable="false">سوريا لينك</string>
+    <string name="sy" translatable="false">سوريا لينك</string>
+    <string name="em" translatable="false">البريد الإلكتروني</string>
+    <string name="re" translatable="false">-استعادة</string>
+    <string name="reg">-تسجيل</string>
+    <string name="log">دخول</string>
+    <string name="pass">كلمة المرور</string>
+    <string name="un">اسم المستخدم</string>
+    <string name="pic">ضع صورة ملفك الشخصي هنا</string>
+    <string name="todo">TODO</string>
+    <string name="banner_ad_unit_id">ca-app-pub-7054731684929484/2106708492</string>
+    <string name="sss">حذف حسابي</string>
+    <string name="google">دخول باستخدام google</string>
+    <string name="repass">ضع بريدك هنا لاسترداد كلمة المرور الخاصة بك</string>
+    <string name="ema">ارسال بريدك</string>
+    <string name="yourmessa">اكتب رسالتك هنا...</string>
+    <string name="prof">ملفي الشخصي</string>
+    <string name="remo">حذف المحادثة</string>
+    <string name="remprof">حذف حسابي</string>
+    <string name="una">اسم المستخدم</string>
+</resources>

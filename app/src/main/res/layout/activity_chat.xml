@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/alix"
+    android:layout_height="match_parent">
+    <LinearLayout  android:orientation="vertical" android:background="@drawable/alix" android:layout_width="match_parent" android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+        <LinearLayout android:layout_gravity="right" android:orientation="vertical" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="match_parent"
+            tools:ignore="RtlHardcoded">
+            <androidx.appcompat.widget.Toolbar
+                android:gravity="right|center_vertical|center_horizontal|center"
+                android:orientation="horizontal"
+                android:id="@+id/activity_Toolbar"
+                android:background="#066c9b"
+                android:layout_width="match_parent"
+                android:layout_height="75dp">
+                <LinearLayout
+                    android:layout_margin="@dimen/d5"
+                    android:padding="@dimen/d4"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="start"
+                    android:layout_height="match_parent">
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_gravity="top|right"
+                    android:id="@+id/chatusername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:id="@+id/laston"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+                <endless.syria.sychat.Utils.Models.CircleImageView
+                    android:layout_gravity="right|center_vertical|center_horizontal|center"
+                    android:id="@+id/chatImageprofile"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/image_2"/>
+            </androidx.appcompat.widget.Toolbar>
+
+
+            <LinearLayout android:orientation="vertical" android:background="@drawable/alix" android:padding="5dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rec"
+                    android:padding="5dp"
+                    android:paddingBottom="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="20">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <include
+                    layout="@layout/message_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

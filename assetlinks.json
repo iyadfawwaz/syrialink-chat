@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "endless.syria.sychat",
+    "sha256_cert_fingerprints":
+    ["1D:18:B0:A3:39:D5:86:81:8D:21:CC:90:E5:19:4C:03:3C:CB:D0:EE:E2:AA:B5:CA:6C:09:1F:D5:05:4B:C5:8A"]
+  }
+}]
