@@ -3,27 +3,22 @@ package endless.syria.sychat.Utils.Models;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import endless.syria.sychat.MiddleActivity;
 import endless.syria.sychat.R;
 
@@ -38,22 +33,33 @@ public class SignInWithGoolge {
     public SignInWithGoolge(){
         super();
     }
-    public  SignInWithGoolge getGoolgeInstance(Activity activity) {
+    public SignInWithGoolge getFacebookInstance(Context context){
+        FacebookSdk.setApplicationId(context.getString(R.string.facebook_app_id));
+        FacebookSdk.setClientToken(context.getString(R.string.facebook_client_token));
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+        return this;
+    }
+public  SignInWithGoolge getGoolgeInstance(Activity activity) {
         this.activity = activity;
         return this;
     }
-    public GoogleSignInClient getClient(){
+    public GoogleSignInClient initializeClient() throws SyriaChatException {
+
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestProfile()
                 .requestEmail()
-                .requestIdToken(activity.getString(R.string.banner_ad_unit_id))
+                .requestIdToken(activity.getString(R.string.default_web_client_idx))
                 .build();
+
         client = GoogleSignIn.getClient(activity,options);
         return client;
     }
-    public void startSignInActivity(){
+    public void startSignInActivity() throws SyriaChatException{
 
-        activity.startActivityForResult(client.getSignInIntent(),SIGNIN_REQ_ID);
+        if (initializeClient() == null){
+            throw new SyriaChatException("مشكلة في صفخة الدخول");
+        }
+        activity.startActivityForResult(initializeClient().getSignInIntent(),SIGNIN_REQ_ID);
     }
 
     public void signInFirebase(Intent intent) throws ApiException {
@@ -62,35 +68,24 @@ public class SignInWithGoolge {
         if ( account != null ) {
             GoogleAuthCredential credential = (GoogleAuthCredential) GoogleAuthProvider.getCredential(account.getIdToken(), null);
             FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(
-                    new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                                    .child("/testData/Users/UsersImageProfile/" + account.getDisplayName() + "/" + account.getDisplayName() + ".jpg");
-                            if (account.getPhotoUrl() != null) {
-                                try {
-                                    InputStream inputStream = new FileInputStream(new File(account.getPhotoUrl().getPath()));
-                                    storageReference.putFile(account.getPhotoUrl())
-                                            .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(activity, task.getResult().getUploadSessionUri().toString(), Toast.LENGTH_LONG).show();
-                                                    } else {
-                                                        Toast.makeText(activity, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                } catch (FileNotFoundException e) {
-                                    Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                                activity.startActivity(new Intent(activity, MiddleActivity.class));
-                            }
+                    task1 -> {
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
+                                .child("/testData/Users/UsersImageProfile/" + account.getDisplayName() + "/" + account.getDisplayName() + ".jpg");
+                        if (account.getPhotoUrl() != null) {
+                            storageReference.putFile(account.getPhotoUrl())
+                                    .addOnCompleteListener(task11 -> {
+                                        if (task11.isSuccessful()) {
+                                            Toast.makeText(activity, (CharSequence) task11.getResult().getUploadSessionUri(), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(activity, (CharSequence) task11.getException(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                            activity.startActivity(new Intent(activity, MiddleActivity.class));
                         }
                     });
         }
     }
-    public void signOut(){
-        getClient().signOut();
+    public void signOut() throws SyriaChatException {
+        initializeClient().signOut();
     }
 }

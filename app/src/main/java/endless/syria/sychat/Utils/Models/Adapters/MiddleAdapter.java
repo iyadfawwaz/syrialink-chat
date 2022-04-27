@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,18 +60,19 @@ public class MiddleAdapter extends RecyclerView.Adapter<MiddleAdapter.MiddleHold
                     .child(firebaseUser.getDisplayName()).child("messages");
         }
         final SavedMessages savedMessages = arrayList.get(position);
-        holder.imageView.setImageURI(savedMessages.getImgUri());
+
+       // Picasso.get().load(savedMessages.getImgUri()).into(holder.imageView);
+        Picasso.get().load(Uri.fromFile(new File("sdcard/iData/users/" +savedMessages.getActiveUser() + "/" + savedMessages.getActiveUser() + ".jpg"))).into(holder.imageView);
+
+
         holder.loadUserLastOnline(holder.time,holder.radioButton,savedMessages.getActiveUser());
         holder.activeUser.setText(savedMessages.getActiveUser());
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                databaseReference.child(savedMessages.getActiveUser()).child("usermessages");
-                Intent intent = new Intent(holder.itemView.getContext(), ChatActivity.class);
-                intent.putExtra("activeUser", savedMessages.getActiveUser());
-                intent.putExtra("imgUri", savedMessages.getImgUri());
-                holder.itemView.getContext().startActivity(intent);
-            }
+        holder.cardView.setOnClickListener(view -> {
+            databaseReference.child(savedMessages.getActiveUser()).child("usermessages");
+            Intent intent = new Intent(holder.itemView.getContext(), ChatActivity.class);
+            intent.putExtra("activeUser", savedMessages.getActiveUser());
+            intent.putExtra("imgUri", savedMessages.getImgUri());
+            holder.itemView.getContext().startActivity(intent);
         });
         if (holder.imageView.getDrawable()==null){
             FirebaseDatabase.getInstance().getReference().child("testData/Users")

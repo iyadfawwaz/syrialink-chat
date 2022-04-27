@@ -20,6 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.squareup.picasso.Picasso;
 import endless.syria.sychat.Utils.Models.CircleImageView;
 import endless.syria.sychat.Utils.Models.SignInWithGoolge;
+import endless.syria.sychat.Utils.Models.SyriaChatException;
 
 
 public class AboutActivity extends AppCompatActivity {
@@ -85,35 +86,46 @@ public class AboutActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).getClient().signOut();
-                                new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).getClient().revokeAccess();
-                              //  firebaseAuth.signOut();
+                                try {
+                                    new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).initializeClient().signOut();
+                                } catch (SyriaChatException e) {
+                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                                try {
+                                    new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).initializeClient().revokeAccess();
+                                } catch (SyriaChatException e) {
+                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                                //  firebaseAuth.signOut();
                                 Toast.makeText(getApplicationContext(), "تم حذف الحساب بنجاح", Toast.LENGTH_LONG).show();
                                 finish();
                                 System.exit(5);
                             } else {
                                 if (!task.isSuccessful() && task.getException() != null) {
-                                    new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).getClient().silentSignIn()
-                                            .addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                                    try {
+                                        new SignInWithGoolge()
+                                                .getGoolgeInstance(AboutActivity.this).initializeClient().silentSignIn()
+                                                .addOnCompleteListener(task1 -> {
 
-                                                    AuthCredential credential = GoogleAuthProvider.getCredential(task.getResult().getIdToken(),null);
+                                                    AuthCredential credential = GoogleAuthProvider.getCredential(task1.getResult().getIdToken(),null);
                                                     FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
-                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            .addOnCompleteListener(
+                                                                    task11 -> FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                            new SignInWithGoolge().getGoolgeInstance(AboutActivity.this).getClient().revokeAccess();
-                                                                            Toast.makeText(getApplicationContext(),"deleted",Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    });
+                                                                public void onComplete(@NonNull Task<Void> task11) {
+                                                                    try {
+                                                                        new SignInWithGoolge()
+                                                                                .getGoolgeInstance(AboutActivity.this).initializeClient().revokeAccess();
+                                                                    } catch (SyriaChatException e) {
+                                                                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                    Toast.makeText(getApplicationContext(),"deleted",Toast.LENGTH_LONG).show();
                                                                 }
-                                                            });
-                                                }
-                                            });
+                                                            }));
+                                                });
+                                    } catch (SyriaChatException e) {
+                                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                    }
 
 
                                 }

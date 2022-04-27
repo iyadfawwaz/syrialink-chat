@@ -3,20 +3,27 @@
     <string name="sy" translatable="false">سوريا لينك</string>
     <string name="em" translatable="false">البريد الإلكتروني</string>
     <string name="re" translatable="false">-استعادة</string>
-    <string name="reg">-تسجيل</string>
-    <string name="log">دخول</string>
-    <string name="pass">كلمة المرور</string>
-    <string name="un">اسم المستخدم</string>
-    <string name="pic">ضع صورة ملفك الشخصي هنا</string>
+    <string name="reg" translatable="false">-تسجيل</string>
+    <string name="log" translatable="false">دخول</string>
+    <string name="pass" translatable="false">كلمة المرور</string>
+    <string name="un" translatable="false">اسم المستخدم</string>
+    <string name="pic" translatable="false">ضع صورة ملفك الشخصي هنا</string>
     <string name="todo">TODO</string>
     <string name="banner_ad_unit_id">ca-app-pub-7054731684929484/2106708492</string>
     <string name="sss">حذف حسابي</string>
     <string name="google">دخول باستخدام google</string>
     <string name="repass">ضع بريدك هنا لاسترداد كلمة المرور الخاصة بك</string>
     <string name="ema">ارسال بريدك</string>
-    <string name="yourmessa">اكتب رسالتك هنا...</string>
+    <string name="yourmessa" translatable="false">اكتب رسالتك هنا...</string>
     <string name="prof">ملفي الشخصي</string>
     <string name="remo">حذف المحادثة</string>
     <string name="remprof">حذف حسابي</string>
     <string name="una">اسم المستخدم</string>
+
+    <string name="facebook_app_id">1098005817597354</string>string>
+    <string name="fb_login_protocol_scheme">fb1234</string>string>
+    <string name="facebook_client_token">e5b991bd9742eb943cf9c88cac8a00a0</string>
+    <string name="github">github</string>
+    <string name="default_web_client_idx" translatable="false">1053595409857-2baaits63dtvu1horrdagkan524p99ak.apps.googleusercontent.com</string>
+
 </resources>

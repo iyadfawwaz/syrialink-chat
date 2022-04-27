@@ -28,22 +28,20 @@ import endless.syria.sychat.Utils.Models.CircleImageView;
 
 public class UsersActivity extends AppCompatActivity {
 
-    FirebaseUser firebaseUser;
-    DatabaseReference databaseReference;
-    String username;
+    private FirebaseUser firebaseUser;
+    private String username;
 
-    RecyclerView recyclerView;
-    CircleImageView imageView;
+    private CircleImageView imageView;
 
-    ArrayList<UsersAdapter.Users> arrayList;
-    UsersAdapter adapter;
+    private ArrayList<UsersAdapter.Users> arrayList;
+    private UsersAdapter adapter;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
             setContentView(R.layout.activity_users);
 
-            recyclerView = findViewById(R.id.userrecycler);
+        RecyclerView recyclerView = findViewById(R.id.userrecycler);
 
             arrayList = new ArrayList<>();
             adapter = new UsersAdapter(arrayList);
@@ -54,7 +52,7 @@ public class UsersActivity extends AppCompatActivity {
                 username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
             }
 
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("testData");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("testData");
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -73,17 +71,20 @@ public class UsersActivity extends AppCompatActivity {
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 }
 
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String str) {
                     if (dataSnapshot.exists()) {
-                        for (DataSnapshot key : dataSnapshot.getChildren()) {
-                            UsersAdapter.Users users = new UsersAdapter.Users(key.getKey());
+                        for (DataSnapshot keys : dataSnapshot.getChildren()) {
+                            String key = keys.getKey();
+                            UsersAdapter.Users users = new UsersAdapter.Users(key);
                             arrayList.add(users);
-                            if (key.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())){
+                            assert key != null;
+                            if (key.equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())) {
                                 arrayList.remove(users);
                             }
-                            //setUserInList(key.getKey(), "hello world");
                         }
+
                         adapter.notifyDataSetChanged();
                     }
                 }

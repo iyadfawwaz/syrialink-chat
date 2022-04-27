@@ -75,13 +75,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
                 if (!file.exists()) {
                     file.mkdirs();
 
-                    child.getFile(new File(file, user+".jpg")).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(holder.itemView.getContext(), "تم حفظ الصورة", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    child.getFile(new File(file, user+".jpg"))
+                            .addOnSuccessListener(taskSnapshot ->
+                                    Toast.makeText(holder.itemView.getContext(), "تم حفظ الصورة", Toast.LENGTH_LONG).show());
                 }
             }
         });
@@ -142,49 +138,48 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
                         }
                     });
         }
+
         private void saveImageProfileToLocalStoragex(final String username) {
             StorageReference fileChild = FirebaseStorage.getInstance().getReference().child("testData/Users/UsersImageProfile/"+username+"/"+username+".jpg");
-            fileChild.getDownloadUrl().addOnCompleteListener( new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull final Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Picasso.get().load(task.getResult()).into(imageView);
-                    }else {
-                       FirebaseDatabase.getInstance().getReference().child("testData/Users").child(username).child("uri")
-                               .addChildEventListener(new ChildEventListener() {
-                                   @Override
-                                   public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            fileChild.getDownloadUrl()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult()).into(imageView);
+                        }else {
+                           FirebaseDatabase.getInstance().getReference().child("testData/Users").child(username).child("uri")
+                                   .addChildEventListener(new ChildEventListener() {
+                                       @Override
+                                       public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                                           Picasso.get().load(Uri.parse(snapshot.getValue(String.class))).into(imageView);
-                                   }
-
-                                   @Override
-                                   public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                       Token token = snapshot.getValue(Token.class);
-                                       if (token != null && token.getImageProfileUri() != null) {
-                                           Picasso.get().load(token.getImageProfileUri()).into(imageView);
+                                               Picasso.get().load(Uri.parse(snapshot.getValue(String.class))).into(imageView);
                                        }
-                                       imageView.setImageResource(R.drawable.image_4);
-                                   }
 
-                                   @Override
-                                   public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                                       @Override
+                                       public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                           Token token = snapshot.getValue(Token.class);
+                                           if (token != null && token.getImageProfileUri() != null) {
+                                               Picasso.get().load(token.getImageProfileUri()).into(imageView);
+                                           }
+                                           imageView.setImageResource(R.drawable.image_4);
+                                       }
 
-                                   }
+                                       @Override
+                                       public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-                                   @Override
-                                   public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                       }
 
-                                   }
+                                       @Override
+                                       public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                                   @Override
-                                   public void onCancelled(@NonNull DatabaseError error) {
+                                       }
 
-                                   }
-                               });
-                    }
-                }
-            });
+                                       @Override
+                                       public void onCancelled(@NonNull DatabaseError error) {
+
+                                       }
+                                   });
+                        }
+                    });
         }
     }
     public static class Users{

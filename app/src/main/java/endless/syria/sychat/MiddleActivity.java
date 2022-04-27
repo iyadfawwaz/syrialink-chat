@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import endless.syria.sychat.Utils.Models.Adapters.MiddleAdapter;
 import endless.syria.sychat.Utils.Models.PrefShared;
 import endless.syria.sychat.Utils.Models.SignInWithGoolge;
+import endless.syria.sychat.Utils.Models.SyriaChatException;
 
 
 public class MiddleActivity extends AppCompatActivity {
@@ -126,10 +129,27 @@ public class MiddleActivity extends AppCompatActivity {
                 break;
 
             case R.id.logoutuser /*2131361993*/:
-                logoutUserNow();
+                try {
+                    logoutUserNow();
+                } catch (SyriaChatException e) {
+                    alertme(e.getMessage());
+                }
                 break;
         }
         return true;
+    }
+
+    private void alertme(String error) {
+        TextView textView = new TextView(this);
+        textView.setTextIsSelectable(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.image_3)
+                .setTitle(R.string.app_name)
+                .setView(textView);
+        if (error != null){
+            textView.setText(error);
+        }
+        builder.create().show();
     }
 
     @Override
@@ -142,35 +162,24 @@ public class MiddleActivity extends AppCompatActivity {
 
     public void del() {
 
-        this.fuser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MiddleActivity.this,"",Toast.LENGTH_LONG).show();
-            }
-        });
+        this.fuser.delete().addOnCompleteListener(
+                task -> Toast.makeText(MiddleActivity.this,"",Toast.LENGTH_LONG).show());
     }
 
-    public void logoutUserNow() {
+    public void logoutUserNow() throws SyriaChatException {
         FirebaseAuth.getInstance().signOut();
         SignInWithGoolge signInWithGoolge = new SignInWithGoolge().getGoolgeInstance(this);
-        final GoogleSignInClient client = signInWithGoolge.getClient();
-        client.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                client.revokeAccess().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "تم تسجيل الخروج", Toast.LENGTH_LONG).show();
-                            finish();
-                            System.exit(1);
-                        }else {
-                            Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                        }
+        final GoogleSignInClient client = signInWithGoolge.initializeClient();
+        client.signOut().addOnCompleteListener(
+                task -> client.revokeAccess().addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "تم تسجيل الخروج", Toast.LENGTH_LONG).show();
+                        finish();
+                        System.exit(1);
+                    }else {
+                        Toast.makeText(getApplicationContext(), task1.getException().getMessage(),Toast.LENGTH_LONG).show();
                     }
-                });
-            }
-        });
+                }));
         finish();
     }
 
@@ -184,18 +193,22 @@ public class MiddleActivity extends AppCompatActivity {
                 "Users/"+str+"/lastOnline").onDisconnect().setValue(ServerValue.TIMESTAMP);
     }
     @Override
-    public void onActivityResult(int i, int i2, Intent intent) {
+    public void onActivityResult(int request, int result, Intent data) {
 
-        super.onActivityResult(i, i2, intent);
-        switch (i) {
+        super.onActivityResult(request, result, data);
+        switch (request) {
             case 703:
-                String stringExtra = intent.getStringExtra("sender");
-                FirebaseDatabase.getInstance().getReference().child("testData").child("Users").child(intent.getStringExtra("reciever")).child("messages").child(stringExtra).child("usermessages");
+                String sender = data.getStringExtra("sender");
+                String reciever = data.getStringExtra("reciever");
+                assert reciever != null;
+                assert sender != null;
+                FirebaseDatabase.getInstance().getReference().child("testData").child("Users")
+                        .child(reciever).child("messages").child(sender).child("usermessages");
 
-                Intent intent2 = new Intent(this,ChatActivity.class);
-                intent2.putExtra("activeUser", stringExtra);
-                intent2.putExtra("imgUri", Uri.parse("sdcard/iData/users/"+stringExtra+"/"+stringExtra+".jpg"));
-                startActivity(intent2);
+                Intent intent = new Intent(this,ChatActivity.class);
+                intent.putExtra("activeUser", sender);
+                intent.putExtra("imgUri", Uri.parse("sdcard/iData/users/"+sender+"/"+sender+".jpg"));
+                startActivity(intent);
 
             default:
         }
